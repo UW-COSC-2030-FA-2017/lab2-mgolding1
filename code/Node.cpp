@@ -1,27 +1,31 @@
 // Node.cpp
-// tom bailey   1050  31 jan 2011
+//  Miles Golding Sep 18 2017
 // Definitions of the Node class methods
 
 
 #include "Node.h"
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 
 Node::Node(double entry)
-	: entry_(entry), next_(NULL)
+	: _entry(entry), _next(nullptr)
 {
-	cout << "Node( " << entry_ << ", " << next_ <<
+	cout << "Node( " << _entry << ", " << _next <<
 		" ) created at " << this << endl;
 }
 
 Node::Node(double entry, Node * next)
-	: entry_(entry), next_(next)
+	: _entry(entry), _next(next)
 {
-	cout << "Node( " << entry_ << ", " << next_ <<
+	cout << "Node( " << _entry << ", " << _next <<
 		" ) created at " << this << endl;
 }
 
 Node::~Node()
 {
-	cout << "Node( " << entry_ << ", " << next_ <<
+	cout << "Node( " << _entry << ", " << _next <<
 		" ) at " << this << " destroyed" << endl;
 }
