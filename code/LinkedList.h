@@ -1,21 +1,21 @@
 // LinkedList.h
 
-// tom bailey   0740  5 oct 2010
+//  Miles Golding Sep 18 2017
 // Declaration of the List class.
 
 // A List stores and manages a sequence of doubles.
 
-// This version uses a pointer to the first Node of a
+// This version uses a pointer to the first Node of a 
 //   singly linked list of Nodes.
+
 
 
 #ifndef _LINKED_LIST_H_
 #define _LINKED_LIST_H_
 
-#include <iostream>
-using std::ostream;
+#include "Node.h"
 
-#include "Node.cpp"
+#include <iostream>
 
 #define ulong unsigned long
 
@@ -34,15 +34,32 @@ public:
 	//         in other
 	List(const List & other);
 
+	// Move constructor
+	// post: this List now stores the sequence that was stored
+	//         in other; other is empty
+	List(List && other);	
+
+	
+
 	// Destructor
 	// post: all the Nodes of this List have been destroyed.
 	~List();
 
-	// Assignment operator
+	// Copy assignment operator
 	// post: this List now stores a copy of the sequence stored
-	//         in other
-	const List & operator=(const List & other);
+	//         in other, this List has been returned
+	List & operator=(const List & other);
 
+	// Move assignment operator
+	// post: this List now stores sequence that was stored
+	//         in other, this List has been returned; other is empty
+	List & operator=(List && other);
+
+	int List::size();
+
+	double List::sum();
+
+	void insertAsLast(double x);
 
 	//*** Accessors ***
 
@@ -52,7 +69,7 @@ public:
 
 	// post: the doubles in this List have been written to
 	//         outfile.
-	void print(ostream & outfile) const;
+	void print(std::ostream & outfile) const;
 
 
 	//*** Mutators ***
@@ -62,14 +79,11 @@ public:
 	void insertAsFirst(double x);
 
 	// pre:  this List is not empty.
-	// post: the first double in this List has been removed
+	// post: the first double in this List has been removed 
 	//         from this List and has been returned.
 	double removeFirst();
 
 private:
-	//*** Inaccessible standard functions ***
-
-
 	//*** Helper functions ***
 	// process part of the linked structure
 
@@ -79,7 +93,9 @@ private:
 
 
 private:
-	Node * first_;
+	Node * _first;
+	int counter;
+	double total;
 
 };
 
@@ -87,6 +103,6 @@ private:
 //*** Auxiliary functions ***
 
 // post: the doubles in list have been written to outfile
-ostream & operator<<(ostream & outfile, const List & list);
+std::ostream & operator<<(std::ostream & outfile, const List & list);
 
 #endif

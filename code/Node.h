@@ -1,6 +1,6 @@
 // Node.h
 
-// tom bailey   0755  05 oct 2010
+//  Miles Golding Sep 18 2017
 // Declare the Node class.
 
 // Node uses public access to simplify code in the
@@ -17,20 +17,18 @@
 #define _NODE_H_
 
 #include <iostream>
-using std::cout;
-using std::endl;
 
 
 class Node
 {
 public:
-	double entry_;
-	Node * next_;
+	double _entry;
+	Node * _next;
 
 public:
 	// Constructors
 
-	// post: this Node contains entry and a NULL pointer
+	// post: this Node contains entry and a null pointer
 	explicit Node(double entry);
 
 	// post: this Node contains entry and next
@@ -40,11 +38,12 @@ public:
 
 	~Node();
 
-private:
 	// Inaccessible standard functions
-	Node();
-	Node(const Node &);
-	const Node & operator=(const Node &);
+	Node() = delete;
+	Node(const Node &) = delete;
+	Node(Node &&) = delete;
+	const Node & operator=(const Node &) = delete;
+	const Node & operator=(Node &&) = delete;
 };
 
 #endif

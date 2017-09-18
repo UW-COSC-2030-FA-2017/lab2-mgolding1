@@ -1,27 +1,43 @@
 // LinkedList.cpp
 
-// tom bailey   0745  5 oct 2010
+// Miles Golding Sep 18 2017
 // Definition of methods for the List class.
 
 #include "LinkedList.h"
 
+#include <iostream>
 #include <utility>
+
+using std::ostream;
+using std::cout;
+using std::endl;
 
 
 List::List()
-	: first_(NULL)
+	: _first(nullptr)
 {
+	cout << "List no parameter constructor" << endl;
 }
 
 
 List::List(const List & other)
-	: first_(clone(other.first_))
+	: _first(clone(other._first))
 {
+	cout << "List copy constructor" << endl;
+}
+
+
+List::List(List && other)
+	: _first(other._first)
+{
+	cout << "List move constructor" << endl;
+	other._first = nullptr;
 }
 
 
 List::~List()
 {
+	cout << "List destructor" << endl;
 	while (!empty())
 	{
 		removeFirst();
@@ -29,38 +45,110 @@ List::~List()
 }
 
 
-const List & List::operator=(const List & other)
+List & List::operator=(const List & other)
 {
+	cout << "List copy assignment" << endl;
 	// check for list = list
 	if (&other != this)
 	{
 		// clear the current contents of this List
 		this -> ~List();
 		// and get a copy of other
-		first_ = clone(other.first_);
+		_first = clone(other._first);
 	}
 
 	return *this;
 }
 
 
-bool List::empty() const
+List & List::operator=(List && other)
 {
-	return first_ == NULL;
+	cout << "List move assignment" << endl;
+	if (&other != this)
+	{
+		// swap the accesss pointers of other and this List
+		Node * save = _first;
+		_first = other._first;
+		other._first = save;
+	}
+
+	return *this;
+
+}
+
+int List::size()
+{
+	counter = 0;
+	if (!empty())
+	{
+		Node * ptr;
+		ptr = _first;
+		while (ptr != nullptr)
+		{
+			ptr = ptr->_next;
+			counter++;
+		}
+	}
+	cout << "Size of list: " << counter << endl;  //print statement
+	return counter;
+}
+
+double List::sum()
+{
+	total = 0;
+	if (!empty())
+	{
+		Node * ptr;
+		ptr = _first;
+		while (ptr != nullptr)
+		{		
+			total += ptr->_entry;
+			ptr = ptr->_next;
+		}
+		cout << "sum: " << total << endl;  //print statement
+		return total;
+		
+	}
 }
 
 
+
+bool List::empty() const
+{ 	
+	return _first == nullptr;
+}
+
+void List::insertAsLast(double x)
+{
+
+	Node * ptr = _first;
+	if ( _first != nullptr) //if there are existing nodes
+	{
+		while(ptr->_next != nullptr)//traverse each node until the last pointer is stored
+		{
+			ptr = ptr->_next;
+		}
+		
+		ptr->_next = new Node(x,nullptr);
+	}
+	else // if no existing nodes
+	{
+		_first = new Node(x, nullptr);
+	}
+	return;
+}
+
 void List::insertAsFirst(double x)
 {
-	first_ = new Node(x, first_);
+	_first = new Node(x, _first);
 }
 
 
 double List::removeFirst()
 {
-	double item = first_->entry_;
-	Node * tempPtr = first_;
-	first_ = first_->next_;
+	double item = _first->_entry;
+	Node * tempPtr = _first;
+	_first = _first->_next;
 	delete tempPtr;
 	return item;
 }
@@ -73,12 +161,12 @@ void List::print(ostream & outfile) const
 	{
 		// The first entry is printed separately because no comma
 		// is needed.
-		outfile << first_->entry_;
-		Node * ptr = first_->next_;
-		while (ptr != NULL)
+		outfile << _first->_entry;
+		Node * ptr = _first->_next;
+		while (ptr != nullptr)
 		{
-			outfile << ", " << ptr->entry_;
-			ptr = ptr->next_;
+			outfile << ", " << ptr->_entry;
+			ptr = ptr->_next;
 		}
 	}
 	outfile << " ]";
@@ -90,18 +178,18 @@ void List::print(ostream & outfile) const
 //   new Node for each double in the structure.
 Node * List::clone(Node * ptr)
 {
-	if (ptr == NULL)
+	if (ptr == nullptr)
 	{
-		return NULL;
+		return nullptr;
 	}
-	Node * first = new Node(ptr->entry_);
+	Node * first = new Node(ptr->_entry);
 	Node * last = first;
-	ptr = ptr->next_;
-	while (ptr != NULL)
+	ptr = ptr->_next;
+	while (ptr != nullptr)
 	{
-		last->next_ = new Node(ptr->entry_);
-		last = last->next_;
-		ptr = ptr->next_;
+		last->_next = new Node(ptr->_entry);
+		last = last->_next;
+		ptr = ptr->_next;
 	}
 	return first;
 }
@@ -113,11 +201,11 @@ Node * List::clone(Node * ptr)
 ////   Nodes.
 //Node * List::clone( Node * ptr )
 //{
-//   if( ptr == NULL )
+//   if( ptr == nullptr )
 //   {
-//      return NULL;
+//      return nullptr;
 //   }
-//   return new Node( ptr->entry_, clone( ptr->next_ ) );
+//   return new Node( ptr->_entry, clone( ptr->_next ) );
 //}
 
 
@@ -126,5 +214,3 @@ ostream & operator<<(ostream & outfile, const List & list)
 	list.print(outfile);
 	return outfile;
 }
-
-
